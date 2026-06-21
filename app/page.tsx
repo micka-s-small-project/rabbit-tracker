@@ -326,7 +326,7 @@ export default function Home() {
                                 return (
                                     <td key={date} className="p-[1px] border-r border-slate-800/30 text-center">
                                       <input
-                                          type="number" value={val ?? ''}
+                                          type="number" value={typeof val === 'number' ? val : ''}
                                           onChange={(e) => updateCell(date, row.id, e.target.value === '' ? null : Number(e.target.value))}
                                           placeholder="-"
                                           className="w-full h-6 text-center bg-transparent focus:bg-slate-950 rounded text-[10px] text-slate-200 font-mono focus:outline-none placeholder-slate-800"
@@ -338,7 +338,7 @@ export default function Home() {
                               // Cycle Progress Buttons
                               let cellBg = 'bg-slate-950/40 text-slate-800 hover:bg-slate-800/50';
                               let cellText = '·';
-                              if (val === true) { cellBg = 'bg-emerald-500 text-slate-950 font-black'; cellText = '✓'; }
+                              if (val === true || val === 'true') { cellBg = 'bg-emerald-500 text-slate-950 font-black'; cellText = '✓'; }
                               else if (val === 'partial') { cellBg = 'bg-amber-500/20 text-amber-400 border border-amber-500/20'; cellText = '▲'; }
                               else if (val === 'skipped') { cellBg = 'bg-slate-800 text-slate-600'; cellText = '—'; }
 
@@ -349,7 +349,7 @@ export default function Home() {
                                           let nextVal: any = null;
                                           if (val === null || val === undefined) nextVal = 'partial';
                                           else if (val === 'partial') nextVal = true;
-                                          else if (val === true) nextVal = 'skipped';
+                                          else if (val === true || val === 'true') nextVal = 'skipped';
                                           else if (val === 'skipped') nextVal = null;
                                           updateCell(date, row.id, nextVal);
                                         }}

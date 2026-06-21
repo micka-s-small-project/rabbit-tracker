@@ -1,7 +1,7 @@
 // app/store/useTrackerStore.ts
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { TrackerCategory, TrackerRow, DailyLog } from '@/types/tracker';
+import { TrackerCategory, TrackerRow, DailyLog } from '@/app/types/tracker';
 
 interface TrackerState {
   categories: TrackerCategory[];
