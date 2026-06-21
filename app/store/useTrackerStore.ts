@@ -1,7 +1,7 @@
 // app/store/useTrackerStore.ts
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { TrackerCategory, TrackerRow, DailyLog } from '@/types/tracker';
+import { TrackerCategory, TrackerRow, DailyLog } from '../types/tracker';
 
 interface TrackerState {
   categories: TrackerCategory[];
@@ -12,26 +12,14 @@ interface TrackerState {
   addItem: (categoryId: string, name: string, type: 'boolean' | 'number', targetValue: any) => void;
   deleteItem: (id: string) => void;
   updateCell: (date: string, rowId: string, value: any) => void;
-  importFullData: (newData: any) => void; // Upgraded to handle migration safely
+  importFullData: (newData: any) => void;
 }
 
 export const useTrackerStore = create<TrackerState>()(
     persist(
         (set) => ({
-          categories: [
-            { id: 'cat_essentials', name: 'Essentials' },
-            { id: 'cat_health', name: 'Health Monitoring' },
-            { id: 'cat_learning', name: 'Learning' },
-          ],
-          rows: [
-            { id: 'read_book', name: 'Read a Book', categoryId: 'cat_essentials', type: 'boolean', targetValue: true },
-            { id: 'focused_work', name: 'Focused Work', categoryId: 'cat_essentials', type: 'number', unit: 'hr', targetValue: 4 },
-            { id: 'weight', name: 'Weight', categoryId: 'cat_health', type: 'number', unit: 'kg', targetValue: null },
-            { id: 'calories', name: 'Calories', categoryId: 'cat_health', type: 'number', unit: 'kcal', targetValue: null },
-            { id: 'sleep_score', name: 'Sleep Score', categoryId: 'cat_health', type: 'number', targetValue: 80 },
-            { id: 'wake_up', name: 'Wake-Up', categoryId: 'cat_health', type: 'number', targetValue: null },
-            { id: 'anki', name: 'Anki Flashcards', categoryId: 'cat_learning', type: 'boolean', targetValue: true },
-          ],
+          categories: [],
+          rows: [],
           logs: {},
 
           addCategory: (name) => set((state) => ({
@@ -72,18 +60,9 @@ export const useTrackerStore = create<TrackerState>()(
             };
           }),
 
-          // 🚀 Smart Migration Layer for Older Backup Formats
-          importFullData: (newData) => set((state) => {
-            let importedCategories = newData.categories || [];
-
-            // 1. Ensure the new 'cat_health' category exists safely
-            if (!importedCategories.some((c: any) => c.id === 'cat_health')) {
-              importedCategories.push({ id: 'cat_health', name: 'Health Monitoring' });
-            }
-
-            // 2. Migrate row items to match our clean single-canvas structural layout
+          importFullData: (newData) => set(() => {
+            const importedCategories = newData.categories || [];
             const migratedRows = (newData.rows || []).map((row: any) => {
-              // If it's a legacy default row, map it explicitly to our clean structural categories
               if (!row.categoryId) {
                 if (row.category === 'health' || ['weight', 'calories', 'sleep_score', 'wake_up'].includes(row.id)) {
                   return { ...row, categoryId: 'cat_health' };
@@ -101,7 +80,8 @@ export const useTrackerStore = create<TrackerState>()(
           })
         }),
         {
-          name: 'rabbit-tracker-storage',
+          // 💡 이름을 v1으로 바꾸어 기존에 로컬스토리지에 쌓여있던 지저분한 dummy 데이터를 한 번 리셋해줍니다.
+          name: 'rabbit-tracker-v1',
           storage: createJSONStorage(() => localStorage),
         }
     )
