@@ -7,7 +7,7 @@ export interface TrackerItem {
   name: string;
   type: MetricType;
   unit?: string;
-  targetValue: string | number | null;
+  targetValue: string | number | boolean | null;
 }
 
 export interface TrackerCategory {
@@ -20,7 +20,7 @@ export interface TrackerRow extends TrackerItem {
 }
 
 export interface TrackerCell {
-  value: string | number | null;
+  value: string | number | boolean | null;
   status: 'completed' | 'partial' | 'skipped' | 'none';
 }
 
