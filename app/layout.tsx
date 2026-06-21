@@ -1,6 +1,6 @@
-// app/layout.tsx
 import type { Metadata } from "next";
-import "./globals.css"; // 프로젝트 스타일 파일 경로에 맞게 유지
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "rabbit-tracker",
@@ -16,6 +16,7 @@ export default function RootLayout({
       <html lang="en">
       <body className="antialiased bg-slate-955">
       {children}
+      <Analytics /> {/* 2. Inject it here right below your main content */}
       </body>
       </html>
   );
