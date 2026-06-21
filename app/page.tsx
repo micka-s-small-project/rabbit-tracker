@@ -319,7 +319,7 @@ export default function Home() {
 
                             {dynamicDates.map((date) => {
                               const cellData = logs[date]?.[row.id];
-                              const val = cellData?.value;
+                              const val = cellData?.value as any;
 
                               // Numeric Data Cells
                               if (row.type === 'number') {
