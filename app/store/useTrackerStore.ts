@@ -18,8 +18,18 @@ interface TrackerState {
 export const useTrackerStore = create<TrackerState>()(
     persist(
         (set) => ({
-          categories: [],
-          rows: [],
+          // 📁 유저가 처음 진입했을 때 보게 될 기본 카테고리
+          categories: [
+            { id: 'cat_essentials', name: 'Essentials' }
+          ],
+
+          // 📊 바둑판을 채워줄 기본 샘플 문항 (OX 체크 2개 + 숫자 입력 1개)
+          rows: [
+            { id: 'item_workout', name: 'Workout', categoryId: 'cat_essentials', type: 'boolean', targetValue: null },
+            { id: 'item_read_book', name: 'Read a Book', categoryId: 'cat_essentials', type: 'boolean', targetValue: null },
+            { id: 'item_sleep_hr', name: 'Sleep Duration', categoryId: 'cat_essentials', type: 'number', targetValue: null }
+          ],
+
           logs: {},
 
           addCategory: (name) => set((state) => ({
@@ -80,8 +90,8 @@ export const useTrackerStore = create<TrackerState>()(
           })
         }),
         {
-          // 💡 이름을 v1으로 바꾸어 기존에 로컬스토리지에 쌓여있던 지저분한 dummy 데이터를 한 번 리셋해줍니다.
-          name: 'rabbit-tracker-v1',
+          // 스토리지 네임을 변경하여 유저들에게 깨끗한 기본 템플릿이 바로 로드되도록 트리거합니다.
+          name: 'rabbit-tracker-v2',
           storage: createJSONStorage(() => localStorage),
         }
     )

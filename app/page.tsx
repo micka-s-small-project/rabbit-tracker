@@ -67,6 +67,7 @@ export default function Home() {
   const [newItemName, setNewItemName] = useState('');
   const [newItemType, setNewItemType] = useState<'boolean' | 'number'>('boolean');
 
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
   useEffect(() => {
     setMounted(true);
 
@@ -130,6 +131,16 @@ export default function Home() {
 
             {/* Top Toolbar Actions */}
             <div className="flex items-center gap-2 self-end sm:self-auto">
+              <button
+                  onClick={() => setIsGuideOpen(!isGuideOpen)}
+                  className={`font-semibold text-xs px-2.5 py-1.5 rounded-lg border transition-all flex items-center gap-1 ${
+                      isGuideOpen
+                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-400 border-slate-800'
+                  }`}
+              >
+                ❓ {isGuideOpen ? 'Hide Guide' : 'How to Use?'}
+              </button>
               {/* Clean Ko-fi Support Action Link */}
               <a
                   href="https://ko-fi.com/yellTa" // TODO: Change to your finalized Ko-fi URL route slot
@@ -154,8 +165,41 @@ export default function Home() {
             </div>
           </header>
 
+          {isGuideOpen && (
+              <div className="mb-4 bg-emerald-950/20 border border-emerald-500/20 p-4 rounded-xl text-xs text-slate-300 animate-fadeIn">
+                <div className="flex justify-between items-center mb-2.5">
+                  <h4 className="font-bold text-emerald-400 flex items-center gap-1.5 text-[13px]">
+                    🎯 Quick Matrix Guide
+                  </h4>
+                  <button
+                      onClick={() => setIsGuideOpen(false)}
+                      className="text-slate-500 hover:text-slate-300 text-[10px]"
+                  >
+                    ✕ Close
+                  </button>
+                </div>
+
+                <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 leading-relaxed text-slate-400">
+                  <li className="bg-slate-900/40 p-2.5 rounded-lg border border-slate-800/40">
+                    <strong className="text-slate-200 block mb-1">1. Build Your Canvas</strong>
+                    First, use the control panel above to create your <span className="text-emerald-400">Categories</span> and trackable <span className="text-emerald-400">Items</span> (Checkboxes or Numeric metrics).
+                  </li>
+                  <li className="bg-slate-900/40 p-2.5 rounded-lg border border-slate-800/40">
+                    <strong className="text-slate-200 block mb-1">2. Cell Controls (Click Cycle)</strong>
+                    For Check (OX) items, click any matrix cell to rotate its status dynamically: <br />
+                    <span className="text-slate-500">· (None)</span> ➡️ <span className="text-amber-400">▲ (Partial)</span> ➡️ <span className="text-emerald-400">✓ (Completed)</span> ➡️ <span className="text-slate-400 font-mono">— (Skipped)</span>
+                  </li>
+                  <li className="bg-slate-900/40 p-2.5 rounded-lg border border-slate-800/40">
+                    <strong className="text-slate-200 block mb-1">3. Privacy & Backups</strong>
+                    Everything is secured locally inside your browser storage. Remember to click <span className="text-slate-300 underline">Export Backup</span> periodically to save a JSON profile to your hard drive!
+                  </li>
+                </ul>
+              </div>
+          )}
+
           {/* Dashboard setup control parameters */}
           <section className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-900/30 p-3 rounded-xl border border-slate-800/50 text-[11px]">
+
             {/* Add Category */}
             <div className="flex flex-col gap-1.5">
               <h3 className="font-bold text-slate-400">＋ Add Category</h3>
